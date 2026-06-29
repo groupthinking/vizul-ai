@@ -61,7 +61,15 @@ function jsonResponse(status, body) {
   });
 }
 
-export async function onRequestPost({ request, env }) {
+export async function onRequest({ request, env }) {
+  if (request.method === 'OPTIONS') {
+    return new Response(null, { status: 204 });
+  }
+
+  if (request.method !== 'POST') {
+    return jsonResponse(405, { error: 'Method not allowed.' });
+  }
+
   if (!env.GEMINI_API_KEY) {
     return jsonResponse(503, { error: 'GEMINI_API_KEY is not configured.' });
   }
@@ -103,12 +111,4 @@ export async function onRequestPost({ request, env }) {
   } catch (error) {
     return jsonResponse(502, { error: error.message || 'Failed to generate visualization.' });
   }
-}
-
-export async function onRequest({ request }) {
-  if (request.method === 'OPTIONS') {
-    return new Response(null, { status: 204 });
-  }
-
-  return jsonResponse(405, { error: 'Method not allowed.' });
 }
