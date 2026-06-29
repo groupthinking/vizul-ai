@@ -121,6 +121,8 @@
         const palette = ['#10b981', '#14b8a6', '#38bdf8', '#a78bfa', '#f59e0b', '#f43f5e'];
         const fallbackInsightWithData = 'Vizul.ai extracted numeric values locally. Add a Gemini API key on your host for richer AI insights.';
         const fallbackInsightWithoutData = 'Add labels and numbers, or configure Gemini, to generate a tailored visualization.';
+        // Matches simple label-value pairs in fallback mode, including "Alpha: 240", "Beta 180k", and "Gamma $1.5m".
+        const fallbackLabelValuePattern = /([A-Za-z][A-Za-z0-9\s-]{0,32})[:=]?\s*\$?(-?\d+(?:\.\d+)?)(?:\s?[kKmM%])?/g;
         let heroChart;
         let resultChart;
 
@@ -155,10 +157,9 @@
                 }
             });
         }
-
         function fallbackVisualization(prompt, preferredChartType) {
-            // Matches simple label-value pairs in fallback mode, including "Alpha: 240", "Beta 180k", and "Gamma $1.5m".
-            const matches = [...prompt.matchAll(/([A-Za-z][A-Za-z0-9\s-]{0,32})[:=]?\s*\$?(-?\d+(?:\.\d+)?)(?:\s?[kKmM%])?/g)];
+        function fallbackVisualization(prompt, preferredChartType) {
+            const matches = [...prompt.matchAll(fallbackLabelValuePattern)];
             const labels = [];
             const values = [];
 
