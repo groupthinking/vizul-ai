@@ -119,8 +119,8 @@
 
     <script>
         const palette = ['#10b981', '#14b8a6', '#38bdf8', '#a78bfa', '#f59e0b', '#f43f5e'];
-        const EXTRACTED_DATA_INSIGHT = 'Vizul.ai extracted numeric values locally. Add a Gemini API key on your host for richer AI insights.';
-        const MISSING_DATA_INSIGHT = 'Add labels and numbers, or configure Gemini, to generate a tailored visualization.';
+        const fallbackInsightWithData = 'Vizul.ai extracted numeric values locally. Add a Gemini API key on your host for richer AI insights.';
+        const fallbackInsightWithoutData = 'Add labels and numbers, or configure Gemini, to generate a tailored visualization.';
         let heroChart;
         let resultChart;
 
@@ -179,7 +179,7 @@
                 datasetLabel: 'Value',
                 labels: labels.length ? labels : ['Example A', 'Example B', 'Example C'],
                 values: values.length ? values : [42, 68, 51],
-                insight: labels.length ? EXTRACTED_DATA_INSIGHT : MISSING_DATA_INSIGHT,
+                insight: labels.length ? fallbackInsightWithData : fallbackInsightWithoutData,
                 recommendation: 'Deploy with GEMINI_API_KEY configured in Vercel or Cloudflare for full AI generation.'
             };
         }
