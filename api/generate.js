@@ -8,6 +8,8 @@ function jsonResponse(res, status, body) {
 }
 
 function buildPrompt({ prompt, chartType, tone }) {
+  const insightTone = tone || 'executive';
+
   return `You are Vizul.ai, an AI data visualization assistant.
 Return only valid JSON with this exact shape:
 {
@@ -16,7 +18,7 @@ Return only valid JSON with this exact shape:
   "datasetLabel": "short dataset label",
   "labels": ["label"],
   "values": [number],
-  "insight": "one concise insight in ${tone || 'executive'} style",
+  "insight": "one concise insight in ${insightTone} style",
   "recommendation": "one concise recommended next step"
 }
 

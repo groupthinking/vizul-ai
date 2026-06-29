@@ -157,6 +157,7 @@
         }
 
         function fallbackVisualization(prompt, preferredChartType) {
+            // Matches label-value pairs such as Alpha: 240, Beta 180k, or Gamma $1.5m.
             const matches = [...prompt.matchAll(/([A-Za-z][A-Za-z0-9\s-]{0,32})[:=]?\s*\$?(-?\d+(?:\.\d+)?)(?:\s?[kKmM%])?/g)];
             const labels = [];
             const values = [];
