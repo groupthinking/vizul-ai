@@ -157,7 +157,7 @@
         }
 
         function fallbackVisualization(prompt, preferredChartType) {
-            // Matches label-value pairs such as Alpha: 240, Beta 180k, or Gamma $1.5m.
+            // Matches simple label-value pairs in fallback mode, including "Alpha: 240", "Beta 180k", and "Gamma $1.5m".
             const matches = [...prompt.matchAll(/([A-Za-z][A-Za-z0-9\s-]{0,32})[:=]?\s*\$?(-?\d+(?:\.\d+)?)(?:\s?[kKmM%])?/g)];
             const labels = [];
             const values = [];
@@ -167,7 +167,7 @@
                 let value = Number(match[2]);
                 const raw = match[0].toLowerCase();
                 if (raw.includes('k')) value *= 1000;
-                if (raw.includes('m')) value *= 1000000;
+                else if (raw.includes('m')) value *= 1000000;
                 if (label && Number.isFinite(value)) {
                     labels.push(label);
                     values.push(value);
