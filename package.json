@@ -1,0 +1,13 @@
+{
+  "name": "vizul-ai",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AI data visualization generator deployable on Vercel and Cloudflare Pages.",
+  "scripts": {
+    "build": "node -e \"console.log('Static app: no build step required')\"",
+    "test": "node --check api/generate.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
