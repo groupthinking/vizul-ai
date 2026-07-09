@@ -72,6 +72,30 @@
                             </select>
                         </div>
                     </div>
+                    <div class="mt-5 rounded-2xl border border-emerald-300/20 bg-slate-950/60 p-4" aria-live="polite">
+                        <div class="mb-3 flex items-center justify-between gap-3">
+                            <h3 class="font-black text-emerald-300">Current status preview</h3>
+                            <span id="statusState" class="rounded-full bg-slate-800 px-3 py-1 text-sm font-bold text-slate-200">Waiting</span>
+                        </div>
+                        <dl class="grid gap-3 text-sm text-slate-300 sm:grid-cols-2">
+                            <div>
+                                <dt class="font-bold text-white">Request</dt>
+                                <dd id="statusRequest">No request entered.</dd>
+                            </div>
+                            <div>
+                                <dt class="font-bold text-white">Chart</dt>
+                                <dd id="statusChart">AI will choose.</dd>
+                            </div>
+                            <div>
+                                <dt class="font-bold text-white">Insight style</dt>
+                                <dd id="statusTone">Executive</dd>
+                            </div>
+                            <div>
+                                <dt class="font-bold text-white">Detected values</dt>
+                                <dd id="statusValues">0 numeric values</dd>
+                            </div>
+                        </dl>
+                    </div>
                     <button id="submitButton" type="submit" class="mt-6 w-full rounded-2xl bg-gradient-to-r from-emerald-400 to-teal-300 p-4 text-lg font-black text-slate-950 shadow-xl shadow-emerald-950/40 transition hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-60">Generate visualization</button>
                     <p id="errorMessage" class="mt-4 hidden rounded-2xl border border-red-300/20 bg-red-500/10 p-4 text-red-100"></p>
                 </form>
@@ -125,6 +149,8 @@
         const fallbackLabelValuePattern = /([A-Za-z][A-Za-z0-9\s-]{0,32})[:=]?\s*\$?(-?\d+(?:\.\d+)?)(?:\s?([kKmM%]))?/g;
         let heroChart;
         let resultChart;
+        let statusState = 'Waiting';
+        let statusMessage = 'No request entered.';
 
         function createChart(canvas, config) {
             const labels = Array.isArray(config.labels) && config.labels.length ? config.labels : ['A', 'B', 'C'];
@@ -204,6 +230,38 @@
             return response.json();
         }
 
+        function formatChartType(chartType) {
+            return chartType === 'auto' ? 'AI will choose.' : `${chartType.charAt(0).toUpperCase()}${chartType.slice(1)} chart`;
+        }
+
+        function formatTone(tone) {
+            return `${tone.charAt(0).toUpperCase()}${tone.slice(1)}`;
+        }
+
+        function countDetectedValues(prompt) {
+            return [...prompt.matchAll(fallbackLabelValuePattern)].length;
+        }
+
+        function updateStatusPreview(form) {
+            const formData = new FormData(form);
+            const prompt = String(formData.get('prompt') || '').trim();
+            const chartType = String(formData.get('chartType') || 'auto');
+            const tone = String(formData.get('tone') || 'executive');
+            const detectedValues = countDetectedValues(prompt);
+
+            document.getElementById('statusState').textContent = statusState;
+            document.getElementById('statusRequest').textContent = prompt ? statusMessage : 'No request entered.';
+            document.getElementById('statusChart').textContent = formatChartType(chartType);
+            document.getElementById('statusTone').textContent = formatTone(tone);
+            document.getElementById('statusValues').textContent = `${detectedValues} numeric ${detectedValues === 1 ? 'value' : 'values'}`;
+        }
+
+        function setStatusPreview(form, state, message) {
+            statusState = state;
+            statusMessage = message;
+            updateStatusPreview(form);
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
             const heroCanvas = document.getElementById('heroChart');
             heroChart = createChart(heroCanvas, {
@@ -219,22 +277,36 @@
             const errorMessage = document.getElementById('errorMessage');
             const submitButton = document.getElementById('submitButton');
             const downloadButton = document.getElementById('downloadButton');
+            updateStatusPreview(form);
+
+            form.addEventListener('input', () => {
+                const prompt = document.getElementById('prompt').value.trim();
+                setStatusPreview(form, prompt ? 'Ready' : 'Waiting', prompt ? 'Ready to generate.' : 'No request entered.');
+            });
+
+            form.addEventListener('change', () => {
+                const prompt = document.getElementById('prompt').value.trim();
+                setStatusPreview(form, prompt ? 'Ready' : 'Waiting', prompt ? 'Ready to generate.' : 'No request entered.');
+            });
 
             form.addEventListener('submit', async (event) => {
                 event.preventDefault();
                 errorMessage.classList.add('hidden');
                 submitButton.disabled = true;
                 submitButton.textContent = 'Generating...';
+                setStatusPreview(form, 'Generating', 'AI generation is in progress.');
 
                 const formData = new FormData(form);
                 let result;
 
                 try {
                     result = await generateVisualization(formData);
+                    setStatusPreview(form, 'Complete', 'AI visualization is ready.');
                 } catch (error) {
                     result = fallbackVisualization(formData.get('prompt'), formData.get('chartType'));
                     errorMessage.textContent = `${error.message} Showing a local fallback chart instead.`;
                     errorMessage.classList.remove('hidden');
+                   setStatusPreview(form, 'Fallback', 'Local fallback chart is ready.');
                 } finally {
                     submitButton.disabled = false;
                     submitButton.textContent = 'Generate visualization';
