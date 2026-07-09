@@ -4,65 +4,259 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vizul.ai - AI Data Visualization Generator</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <meta name="description" content="Transform data, text, or ideas into beautiful charts, graphs, and dashboards with Gemini AI. Instant visualizations for business, reports, and insights.">
+    <meta name="description" content="Transform data, text, or ideas into beautiful charts, summaries, and dashboards with Gemini AI.">
     <meta name="keywords" content="AI visualization, data viz AI, Gemini charts, graph generator">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" defer></script>
 </head>
-<body class="bg-gradient-to-br from-emerald-900 via-green-900 to-teal-900 min-h-screen text-white font-sans">
-    <nav class="py-6 px-8 flex justify-between items-center">
-        <h1 class="text-2xl font-bold">Vizul.ai</h1>
+<body class="bg-slate-950 min-h-screen text-white font-sans">
+    <div class="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(16,185,129,.35),transparent_32rem),radial-gradient(circle_at_bottom_right,rgba(20,184,166,.25),transparent_28rem)]"></div>
+
+    <nav class="mx-auto flex max-w-7xl items-center justify-between px-6 py-6">
+        <a href="/" class="text-2xl font-black tracking-tight">Vizul.ai</a>
+        <a href="#app" class="rounded-full bg-emerald-400 px-5 py-2 font-bold text-slate-950 transition hover:bg-emerald-300">Try it</a>
     </nav>
+
     <main>
-        <!-- Hero -->
-        <section class="py-32 px-8 text-center">
-            <h1 class="text-7xl md:text-8xl font-black mb-8 bg-gradient-to-r from-emerald-400 to-teal-500 bg-clip-text text-transparent">Vizul.ai</h1>
-            <p class="text-2xl md:text-3xl mb-12 max-w-4xl mx-auto leading-relaxed">Turn messy data or simple descriptions into stunning visualizations instantly. Powered by Gemini AI.</p>
-            <div class="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto items-center">
-                <div>
-                    <div class="bg-white/10 backdrop-blur p-8 rounded-2xl mb-8">
-                        <h3 class="text-3xl font-bold mb-6">Data to Viz</h3>
-                        <p class="text-xl mb-4">"Sales by region: Q1 100k, Q2 150k"</p>
-                        <div class="bg-white/20 p-4 rounded-lg font-mono text-sm">→ Bar chart, pie, dashboard</div>
+        <section class="mx-auto grid max-w-7xl gap-12 px-6 py-16 lg:grid-cols-[1fr_.9fr] lg:items-center">
+            <div>
+                <p class="mb-4 inline-flex rounded-full border border-emerald-300/30 bg-emerald-300/10 px-4 py-2 text-sm font-semibold text-emerald-200">Gemini-powered chart builder</p>
+                <h1 class="mb-6 text-5xl font-black leading-tight tracking-tight md:text-7xl">
+                    Turn messy data into clear visuals.
+                </h1>
+                <p class="mb-8 max-w-2xl text-xl leading-8 text-slate-300">
+                    Paste raw numbers, CSV rows, notes, or a business question. Vizul.ai suggests a chart, creates the data series, and explains the insight.
+                </p>
+                <div class="flex flex-col gap-3 sm:flex-row">
+                    <a href="#app" class="rounded-2xl bg-gradient-to-r from-emerald-400 to-teal-300 px-7 py-4 text-center text-lg font-black text-slate-950 shadow-xl shadow-emerald-950/40 transition hover:scale-[1.02]">Generate a chart</a>
+                    <a href="#deploy" class="rounded-2xl border border-white/15 bg-white/10 px-7 py-4 text-center text-lg font-bold text-white transition hover:bg-white/15">Deploy notes</a>
+                </div>
+            </div>
+            <div class="rounded-3xl border border-white/10 bg-white/10 p-5 shadow-2xl backdrop-blur">
+                <div class="rounded-2xl bg-slate-900 p-5">
+                    <p class="mb-3 text-sm font-bold uppercase tracking-widest text-emerald-300">Example prompt</p>
+                    <p class="mb-5 text-slate-300">“Revenue by region: North 120k, South 92k, East 155k, West 110k. Show the strongest market.”</p>
+                    <div class="h-64 rounded-xl bg-white p-4">
+                        <canvas id="heroChart" aria-label="Example revenue chart"></canvas>
                     </div>
                 </div>
-                <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="AI Generated Data Visualization Demo" class="rounded-3xl shadow-2xl w-full max-w-md mx-auto">
             </div>
         </section>
-        <!-- CTA -->
-        <section class="py-24 px-8">
-            <div class="max-w-lg mx-auto bg-white/10 backdrop-blur rounded-3xl p-12 text-center">
-                <h2 class="text-4xl font-bold mb-8">Early Access</h2>
-                <form action="https://formsubmit.co/garveyht@gmail.com" method="POST" class="space-y-4">
-                    <input type="hidden" name="_subject" value="Vizul.ai Early Access Signup">
-                    <input type="hidden" name="_captcha" value="false">
-                    <input type="email" name="email" required placeholder="your@email.com" class="w-full p-5 rounded-xl bg-white/20 border border-white/30 focus:outline-none focus:ring-4 ring-emerald-500/50 text-lg">
-                    <input type="text" name="use_case" placeholder="e.g., Business Reports, Dashboards" class="w-full p-5 rounded-xl bg-white/20 border border-white/30 focus:outline-none focus:ring-4 ring-emerald-500/50 text-lg">
-                    <button type="submit" class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 p-5 rounded-xl font-bold text-xl shadow-2xl hover:shadow-3xl transition-all">Join Waitlist</button>
+
+        <section id="app" class="mx-auto max-w-7xl px-6 py-12">
+            <div class="grid gap-8 lg:grid-cols-[.85fr_1.15fr]">
+                <form id="vizForm" class="rounded-3xl border border-white/10 bg-white/10 p-6 shadow-2xl backdrop-blur">
+                    <div class="mb-6">
+                        <h2 class="mb-2 text-3xl font-black">Create visualization</h2>
+                        <p class="text-slate-300">Describe your data or paste values. The app works best with labels and numbers.</p>
+                    </div>
+                    <label for="prompt" class="mb-2 block font-bold">Data or request</label>
+                    <textarea id="prompt" name="prompt" required rows="11" class="w-full rounded-2xl border border-white/10 bg-slate-950/70 p-4 text-white outline-none ring-emerald-400/40 transition placeholder:text-slate-500 focus:ring-4" placeholder="Example: Product sales in May: Alpha 240, Beta 180, Gamma 310, Delta 125. Make a bar chart and summarize the key insight."></textarea>
+                    <div class="mt-4 grid gap-4 sm:grid-cols-2">
+                        <div>
+                            <label for="chartType" class="mb-2 block font-bold">Preferred chart</label>
+                            <select id="chartType" name="chartType" class="w-full rounded-2xl border border-white/10 bg-slate-950/70 p-4 text-white outline-none ring-emerald-400/40 focus:ring-4">
+                                <option value="auto">Let AI choose</option>
+                                <option value="bar">Bar</option>
+                                <option value="line">Line</option>
+                                <option value="pie">Pie</option>
+                                <option value="doughnut">Doughnut</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="tone" class="mb-2 block font-bold">Insight style</label>
+                            <select id="tone" name="tone" class="w-full rounded-2xl border border-white/10 bg-slate-950/70 p-4 text-white outline-none ring-emerald-400/40 focus:ring-4">
+                                <option value="executive">Executive</option>
+                                <option value="analyst">Analyst</option>
+                                <option value="simple">Simple</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button id="submitButton" type="submit" class="mt-6 w-full rounded-2xl bg-gradient-to-r from-emerald-400 to-teal-300 p-4 text-lg font-black text-slate-950 shadow-xl shadow-emerald-950/40 transition hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-60">Generate visualization</button>
+                    <p id="errorMessage" class="mt-4 hidden rounded-2xl border border-red-300/20 bg-red-500/10 p-4 text-red-100"></p>
                 </form>
-                <p class="mt-6 text-sm opacity-75">Privacy guaranteed.</p>
+
+                <section class="rounded-3xl border border-white/10 bg-white/10 p-6 shadow-2xl backdrop-blur" aria-live="polite">
+                    <div class="mb-5 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                        <div>
+                            <h2 id="resultTitle" class="text-3xl font-black">Your chart appears here</h2>
+                            <p id="resultSubtitle" class="text-slate-300">Use the form to generate a visualization.</p>
+                        </div>
+                        <button id="downloadButton" type="button" class="hidden rounded-full border border-white/15 bg-white/10 px-4 py-2 font-bold transition hover:bg-white/15">Download PNG</button>
+                    </div>
+                    <div class="min-h-[24rem] rounded-2xl bg-white p-4">
+                        <canvas id="resultChart" aria-label="Generated visualization"></canvas>
+                    </div>
+                    <div class="mt-5 grid gap-4 md:grid-cols-2">
+                        <article class="rounded-2xl bg-slate-950/60 p-5">
+                            <h3 class="mb-2 font-black text-emerald-300">Insight</h3>
+                            <p id="insight" class="text-slate-300">Waiting for data.</p>
+                        </article>
+                        <article class="rounded-2xl bg-slate-950/60 p-5">
+                            <h3 class="mb-2 font-black text-emerald-300">Recommended next step</h3>
+                            <p id="recommendation" class="text-slate-300">Generate a chart to see a recommendation.</p>
+                        </article>
+                    </div>
+                </section>
             </div>
         </section>
-        <!-- Affiliates -->
-        <section class="py-24 px-8">
-            <h2 class="text-4xl font-bold mb-16 text-center">Power Up Your Data</h2>
-            <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                <a href="https://www.amazon.com/s?k=data+visualization+tools&tag=groupthinking-20" target="_blank" class="group bg-white/10 hover:bg-white/20 backdrop-blur p-8 rounded-3xl transition-all hover:scale-105 hover:shadow-2xl">
-                    <h3 class="text-2xl font-bold mb-4 group-hover:text-emerald-400">Viz Software</h3>
-                    <p>Tableau, Excel addons.</p>
-                </a>
-                <a href="https://www.amazon.com/s?k=tablets+for+design&tag=groupthinking-20" target="_blank" class="group bg-white/10 hover:bg-white/20 backdrop-blur p-8 rounded-3xl transition-all hover:scale-105 hover:shadow-2xl">
-                    <h3 class="text-2xl font-bold mb-4 group-hover:text-emerald-400">Drawing Tablets</h3>
-                    <p>For detailed charts.</p>
-                </a>
-                <a href="https://plotly.com" target="_blank" class="group bg-white/10 hover:bg-white/20 backdrop-blur p-8 rounded-3xl transition-all hover:scale-105 hover:shadow-2xl">
-                    <h3 class="text-2xl font-bold mb-4 group-hover:text-emerald-400">Plotly</h3>
-                    <p>Open-source viz.</p>
-                </a>
+
+        <section id="deploy" class="mx-auto max-w-7xl px-6 py-16">
+            <div class="rounded-3xl border border-white/10 bg-white/10 p-8 backdrop-blur">
+                <h2 class="mb-4 text-3xl font-black">Built for Vercel and Cloudflare</h2>
+                <p class="mb-4 text-slate-300">Deploy the same static app with an API route on Vercel or a Pages Function on Cloudflare. Set <code class="rounded bg-slate-950 px-2 py-1">GEMINI_API_KEY</code> in the hosting provider dashboard.</p>
+                <ul class="grid gap-3 text-slate-300 md:grid-cols-2">
+                    <li class="rounded-2xl bg-slate-950/60 p-4"><strong class="text-white">Vercel:</strong> serves <code>/api/generate</code> from <code>api/generate.js</code>.</li>
+                    <li class="rounded-2xl bg-slate-950/60 p-4"><strong class="text-white">Cloudflare:</strong> serves <code>/api/generate</code> from <code>functions/api/generate.js</code>.</li>
+                </ul>
             </div>
         </section>
     </main>
-    <footer class="py-12 px-8 text-center bg-black/30">
-        <p>&copy; 2026 Vizul.ai. Gemini-powered visualizations.</p>
+
+    <footer class="px-6 py-10 text-center text-slate-400">
+        <p>&copy; 2026 Vizul.ai. AI-assisted visualizations.</p>
     </footer>
+
+    <script>
+        const palette = ['#10b981', '#14b8a6', '#38bdf8', '#a78bfa', '#f59e0b', '#f43f5e'];
+        const fallbackInsightWithData = 'Vizul.ai extracted numeric values locally. Configure AI Gateway or Gemini on your host for richer AI insights.';
+        const fallbackInsightWithoutData = 'Add labels and numbers, or configure AI Gateway or Gemini, to generate a tailored visualization.';
+        // Matches simple label-value pairs in fallback mode, including "Alpha: 240", "Beta 180k", and "Gamma $1.5m".
+        const fallbackLabelValuePattern = /([A-Za-z][A-Za-z0-9\s-]{0,32})[:=]?\s*\$?(-?\d+(?:\.\d+)?)(?:\s?([kKmM%]))?/g;
+        let heroChart;
+        let resultChart;
+
+        function createChart(canvas, config) {
+            const labels = Array.isArray(config.labels) && config.labels.length ? config.labels : ['A', 'B', 'C'];
+            const values = Array.isArray(config.values) && config.values.length ? config.values.map(Number) : [12, 19, 8];
+            const chartType = ['bar', 'line', 'pie', 'doughnut'].includes(config.chartType) ? config.chartType : 'bar';
+
+            return new Chart(canvas, {
+                type: chartType,
+                data: {
+                    labels,
+                    datasets: [{
+                        label: config.datasetLabel || 'Value',
+                        data: values,
+                        backgroundColor: palette,
+                        borderColor: palette,
+                        borderWidth: 2,
+                        tension: 0.35
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: chartType === 'pie' || chartType === 'doughnut' },
+                        title: { display: Boolean(config.title), text: config.title }
+                    },
+                    scales: chartType === 'pie' || chartType === 'doughnut' ? {} : {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        }
+        function fallbackVisualization(prompt, preferredChartType) {
+            const matches = [...prompt.matchAll(fallbackLabelValuePattern)];
+            const labels = [];
+            const values = [];
+
+            for (const match of matches.slice(0, 8)) {
+                const label = match[1].trim().replace(/\s+/g, ' ');
+                let value = Number(match[2]);
+                const suffix = (match[3] || '').toLowerCase();
+                if (suffix === 'k') value *= 1000;
+                else if (suffix === 'm') value *= 1000000;
+                if (label && Number.isFinite(value)) {
+                    labels.push(label);
+                    values.push(value);
+                }
+            }
+
+            return {
+                title: 'Generated visualization',
+                chartType: preferredChartType === 'auto' ? 'bar' : preferredChartType,
+                datasetLabel: 'Value',
+                labels: labels.length ? labels : ['Example A', 'Example B', 'Example C'],
+                values: values.length ? values : [42, 68, 51],
+                insight: labels.length ? fallbackInsightWithData : fallbackInsightWithoutData,
+                recommendation: 'Deploy with AI_GATEWAY_API_KEY (preferred) or GEMINI_API_KEY configured in Vercel or Cloudflare for full AI generation.'
+            };
+        }
+
+        async function generateVisualization(formData) {
+            const response = await fetch('/api/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    prompt: formData.get('prompt'),
+                    chartType: formData.get('chartType'),
+                    tone: formData.get('tone')
+                })
+            });
+
+            if (!response.ok) {
+                const details = await response.json().catch(() => ({}));
+                throw new Error(details.error || 'Unable to generate visualization.');
+            }
+
+            return response.json();
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const heroCanvas = document.getElementById('heroChart');
+            heroChart = createChart(heroCanvas, {
+                title: 'Revenue by region',
+                chartType: 'bar',
+                datasetLabel: 'Revenue',
+                labels: ['North', 'South', 'East', 'West'],
+                values: [120, 92, 155, 110]
+            });
+
+            const form = document.getElementById('vizForm');
+            const resultCanvas = document.getElementById('resultChart');
+            const errorMessage = document.getElementById('errorMessage');
+            const submitButton = document.getElementById('submitButton');
+            const downloadButton = document.getElementById('downloadButton');
+
+            form.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                errorMessage.classList.add('hidden');
+                submitButton.disabled = true;
+                submitButton.textContent = 'Generating...';
+
+                const formData = new FormData(form);
+                let result;
+
+                try {
+                    result = await generateVisualization(formData);
+                } catch (error) {
+                    result = fallbackVisualization(formData.get('prompt'), formData.get('chartType'));
+                    errorMessage.textContent = `${error.message} Showing a local fallback chart instead.`;
+                    errorMessage.classList.remove('hidden');
+                } finally {
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Generate visualization';
+                }
+
+                if (resultChart) resultChart.destroy();
+                resultChart = createChart(resultCanvas, result);
+                document.getElementById('resultTitle').textContent = result.title || 'Generated visualization';
+                document.getElementById('resultSubtitle').textContent = `${(result.chartType || 'bar').toUpperCase()} chart`;
+                document.getElementById('insight').textContent = result.insight || 'No insight returned.';
+                document.getElementById('recommendation').textContent = result.recommendation || 'Review the chart and refine your data.';
+                downloadButton.classList.remove('hidden');
+            });
+
+            downloadButton.addEventListener('click', () => {
+                if (!resultChart) return;
+                const link = document.createElement('a');
+                link.download = 'vizul-ai-chart.png';
+                link.href = resultChart.toBase64Image();
+                link.click();
+            });
+        });
+    </script>
 </body>
 </html>
